@@ -19,7 +19,7 @@ from enroll import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('signup/', views.sign_up, name='signupVariable'),
+    path('', views.sign_up, name='signupVariable'),
     path('login/', views.user_login, name='loginVariable'),
     path('profile/', views.user_profile, name='profileVariable'),
     path('logout/', views.user_logout, name='logout'),
