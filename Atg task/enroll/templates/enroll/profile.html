@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profile {{name}}</title>
+    <style>
+    *{
+        margin:7px
+    }
+    .success{
+        background-color: green;
+
+    }
+    </style>
+</head>
+<body>
+    <h1>this is user profile</h1>
+    <h3>Welcome {{name}}</h3>
+
+<!--list of users for admin profile page only-->
+{% if users != None %}
+    <h3>List of Users</h3>
+
+    {% for user in users %}
+    <ul>
+        <li>
+                                <!--as we are getting user.name ,in same way here we are getting user.id(means current user id) and this will pass into our url path-->
+            <a href="{% url 'userdetail' user.id %}">{{user.username}}</a>
+            <br><br>
+        </li>
+    </ul>
+    {% endfor %}
+
+{% endif %}
+
+    
+{% if messages %}
+
+    {% for message in messages %}
+    
+        <p {% if message.tags %} class= "{{message.tags}}" {% endif %}>
+            {{message}}
+        </p>
+    {% endfor %}
+
+{% endif %} <br>
+
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+
+    <!--to show error if available at the top of input fields-->
+    {% if form.non_field_errors %}
+    
+        {% for error in form.non_field_errors %}
+            <p>{{error}}</p>
+        {% endfor %}
+    
+    {% endif %}
+
+
+    {% for fm in form %}            <!--striptags remove the <li> bullet tag-->        
+        {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+    {% endfor %}
+    <input type="submit" value="save">
+    </form>
+<br>
+
+<a href="{% url 'changepass' %}">Change Password</a>
+<a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>

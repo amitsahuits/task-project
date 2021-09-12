@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+    .success{
+        background: green;
+        color: white;
+    }
+    </style>
+</head>
+<body>
+{% comment %} <h1>showing raw user Authentication system as django provided us</h1>
+{{form.as_p}} 
+<br><br> {% endcomment %}
+        <!--OR-->
+<h1>showing user Authentication form using for loop</h1>
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+    {%for fm in form%}               <!--striptags will remove the li tag bullot point-->
+        {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+    {%endfor%}
+    <input type="submit">
+</form>
+
+<!--creating a login link as we did in userlogin.html where we made the signup link-->
+<a href="{% url 'loginVariable' %}">Login</a>
+
+<!--using this to get success message when signup successfully.-->
+{% for message in messages %}
+    <small {% if message.tags %} class='{{message.tags}}' {% endif %} > {{message}} </small>
+{% endfor %}
+</body>
+</html>
