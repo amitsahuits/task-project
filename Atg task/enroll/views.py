@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from .forms import SignUpForm, EditUserProfileForm ,EditAdminProfileForm
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserChangeForm, UsernameField
 from django.contrib.auth import authenticate,login,logout, update_session_auth_hash
      
 
@@ -11,7 +11,6 @@ from django.contrib.auth import authenticate,login,logout, update_session_auth_h
 def sign_up(request):
     if request.method == "POST":
         fm = SignUpForm(request.POST)
-        print('yaha se->',request.POST, '<-this is post')
         if fm.is_valid():
             messages.success(request, 'Account has been created succesfully')
             fm.save()
@@ -59,14 +58,14 @@ def user_profile(request):
             if request.user.is_superuser == True:
                 
                 #if also passing users object here so that our super user can see data of others user
-                users = User.objects.all()
+                users = UsernameField.objects.all()
                 fm = EditAdminProfileForm(request.POST,instance=request.user)
 
             #else it will pass fields that we defined in our EditAdminProfileForm
             else:
                 # to show user information we are creating object fm and passing current user information to it and then we're passing that into our template.
                 fm = EditUserProfileForm(request.POST,instance=request.user)
-                #users = None , so that we can avoid 'call before assign' error see video 68 , skip to 23:18
+                #users = None , so that we can avoid 'call before assign' 
                 users = None
 
             if fm.is_valid():
@@ -88,7 +87,7 @@ def user_profile(request):
             else:
                 # to show user information we are creating object fm and passing current user information to it and then we're passing that into our template.
                 fm = EditUserProfileForm(instance=request.user)
-                #users = None , so that we can avoid 'call before assign' error see video 68 , skip to 23:18
+                #users = None , so that we can avoid 'call before assign'
                 users = None
 
         return render(request,'enroll/profile.html' , {'name': request.user , 'form':fm , 'users':users})
@@ -128,7 +127,7 @@ def user_change_pass(request):
 def user_detail(request,id):
     if request.user.is_authenticated:
 #pi is usergiven(primary id)     #pk = primary key
-        pi = User.objects.get(pk=id)
+        pi = UserChangeForm.objects.get(pk=id)
         #taking admin profile form , so that we can see all the fields of user
         fm = EditAdminProfileForm(instance=pi)
         return render(request, 'enroll/userdetail.html',{'form': fm})
